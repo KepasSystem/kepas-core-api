@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Kepas.Core.Api.Domain.Interfaces;
 using Kepas.Core.Api.Domain.DTOs.Requests;
@@ -22,16 +22,16 @@ namespace Kepas.Core.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllTenants()
+        public async Task<IActionResult> GetAllTenants([FromQuery] string search = "", [FromQuery] int page = 1, [FromQuery] int limit = 10)
         {
             try
             {
-                var tenants = await _tenantService.GetAllTenantsAsync();
-                return Ok(ApiResponse<List<TenantDTO>>.Ok(tenants, "Inquilinos carregados com sucesso."));
+                var tenants = await _tenantService.GetAllTenantsAsync(search, page, limit);
+                return Ok(ApiResponse<Kepas.Core.Api.Domain.DTOs.Responses.Pagination.PagedResult<TenantDTO>>.Ok(tenants, "Inquilinos carregados com sucesso."));
             }
             catch (Exception ex)
             {
-                return BadRequest(ApiResponse<List<TenantDTO>>.Error("Ocorreu um erro interno ao processar a operação."));
+                return BadRequest(ApiResponse<Kepas.Core.Api.Domain.DTOs.Responses.Pagination.PagedResult<TenantDTO>>.Error("Ocorreu um erro interno ao processar a operação."));
             }
         }
 
@@ -45,7 +45,7 @@ namespace Kepas.Core.Api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ApiResponse<TenantDTO>.Error("Ocorreu um erro interno ao processar a operação."));
+                return BadRequest(ApiResponse<TenantDTO>.Error("Ocorreu um erro interno ao processar a operaÃ§Ã£o."));
             }
         }
 
@@ -54,18 +54,18 @@ namespace Kepas.Core.Api.Controllers
         public async Task<IActionResult> ResolveTenant([FromQuery] string subdomain)
         {
             if (string.IsNullOrEmpty(subdomain))
-                return BadRequest(ApiResponse<TenantDTO>.Error("Subdomínio não informado."));
+                return BadRequest(ApiResponse<TenantDTO>.Error("SubdomÃ­nio nÃ£o informado."));
 
             try
             {
                 var tenant = await _tenantService.GetTenantBySubdomainAsync(subdomain);
                 if (tenant == null)
-                    return NotFound(ApiResponse<TenantDTO>.Error("Empresa não encontrada."));
+                    return NotFound(ApiResponse<TenantDTO>.Error("Empresa nÃ£o encontrada."));
                     
                 if (!tenant.IsActive)
                     return BadRequest(ApiResponse<TenantDTO>.Error("Conta suspensa. Contate o suporte."));
 
-                // Retorna apenas dados públicos/inofensivos necessários pro frontend (Logo, Nome, Tema, ID)
+                // Retorna apenas dados pÃºblicos/inofensivos necessÃ¡rios pro frontend (Logo, Nome, Tema, ID)
                 return Ok(ApiResponse<TenantDTO>.Ok(tenant, "Tenant resolvido."));
             }
             catch (Exception ex)
@@ -84,9 +84,10 @@ namespace Kepas.Core.Api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ApiResponse<object>.Error("Ocorreu um erro interno ao processar a operação."));
+                return BadRequest(ApiResponse<object>.Error("Ocorreu um erro interno ao processar a operaÃ§Ã£o."));
             }
         }
     }
 }
+
 

@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Kepas.Core.Api.Domain.DTOs.Requests.ServiceAccounts;
 using Kepas.Core.Api.Domain.DTOs.Responses.ServiceAccounts;
+using Kepas.Core.Api.Domain.DTOs.Responses.Pagination;
 
 namespace Kepas.Core.Api.Domain.Interfaces
 {
     public interface IServiceAccountService
     {
-        Task<List<ServiceAccountDTO>> GetAllAsync();
+        Task<PagedResult<ServiceAccountDTO>> GetAllAsync(string search, int page, int limit);
         Task<ServiceAccountDTO> CreateAsync(CreateServiceAccountRequest request);
     }
 }

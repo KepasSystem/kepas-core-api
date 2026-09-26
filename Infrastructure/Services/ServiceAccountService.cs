@@ -7,6 +7,7 @@ using Kepas.Core.Api.Domain.Interfaces;
 using Kepas.Core.Api.Domain.Entities;
 using Kepas.Core.Api.Domain.DTOs.Requests.ServiceAccounts;
 using Kepas.Core.Api.Domain.DTOs.Responses.ServiceAccounts;
+using Kepas.Core.Api.Domain.DTOs.Responses.Pagination;
 using Kepas.Core.Api.Infrastructure.Data;
 
 namespace Kepas.Core.Api.Infrastructure.Services
@@ -20,10 +21,22 @@ namespace Kepas.Core.Api.Infrastructure.Services
             _context = context;
         }
 
-        public async Task<List<ServiceAccountDTO>> GetAllAsync()
+        public async Task<PagedResult<ServiceAccountDTO>> GetAllAsync(string search, int page, int limit)
         {
-            return await _context.ServiceAccounts
+            var query = _context.ServiceAccounts.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var s = search.ToLower();
+                query = query.Where(a => a.OwnerName.ToLower().Contains(s) || a.Email.ToLower().Contains(s));
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var items = await query
                 .OrderByDescending(a => a.CreatedAt)
+                .Skip((page - 1) * limit)
+                .Take(limit)
                 .Select(a => new ServiceAccountDTO
                 {
                     Id = a.Id,
@@ -34,6 +47,14 @@ namespace Kepas.Core.Api.Infrastructure.Services
                     TotalSubscriptions = a.Subscriptions.Count
                 })
                 .ToListAsync();
+
+            return new PagedResult<ServiceAccountDTO>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                PageNumber = page,
+                PageSize = limit
+            };
         }
 
         public async Task<ServiceAccountDTO> CreateAsync(CreateServiceAccountRequest request)

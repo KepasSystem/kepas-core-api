@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Kepas.Core.Api.Domain.Interfaces;
@@ -23,7 +23,7 @@ namespace Kepas.Core.Api.Controllers
         public async Task<IActionResult> GetAll()
         {
             var accounts = await _serviceAccountService.GetAllAsync();
-            return Ok(ApiResponse<object>.Ok(accounts, "Contas de serviço carregadas com sucesso."));
+            return Ok(ApiResponse<object>.Ok(accounts, "Contas de serviÃ§o carregadas com sucesso."));
         }
 
         [HttpPost]
@@ -32,7 +32,7 @@ namespace Kepas.Core.Api.Controllers
             try
             {
                 var account = await _serviceAccountService.CreateAsync(request);
-                return Ok(ApiResponse<object>.Ok(account, "Conta de serviço criada com sucesso."));
+                return Ok(ApiResponse<object>.Ok(account, "Conta de serviÃ§o criada com sucesso."));
             }
             catch (System.Exception ex)
             {
@@ -41,3 +41,4 @@ namespace Kepas.Core.Api.Controllers
         }
     }
 }
+
