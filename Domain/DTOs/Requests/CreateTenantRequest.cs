@@ -17,5 +17,8 @@ namespace Kepas.Core.Api.Domain.DTOs.Requests
 
         public string OwnerName { get; set; } // Nome do usuario admin que será criado
         public string OwnerPassword { get; set; } // Senha inicial
+        
+        [Required]
+        public Guid AccountId { get; set; }
     }
 }

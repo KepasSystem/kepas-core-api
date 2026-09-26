@@ -37,6 +37,7 @@ builder.Services.AddScoped<ITenantService, TenantService>();
 builder.Services.AddScoped<ISystemSettingsService, SystemSettingsService>();
 builder.Services.AddScoped<IPlatformRoleService, PlatformRoleService>();
 builder.Services.AddScoped<IPlatformAdminService, PlatformAdminService>();
+builder.Services.AddScoped<IServiceAccountService, ServiceAccountService>();
 
 // JWT Auth Config
 var jwtKey = builder.Configuration["JwtSettings:Secret"] ?? "KEPAS_VERY_LONG_SECRET_KEY_FOR_JWT_SIGNATURE_12345!";

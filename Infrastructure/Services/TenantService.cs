@@ -46,15 +46,15 @@ namespace Kepas.Core.Api.Infrastructure.Services
             if (await _context.Tenants.AnyAsync(t => t.Subdomain == request.Subdomain))
                 throw new Exception("Subdomínio já está em uso.");
 
-            // Pegamos o ServiceAccount global por segurança
-            var superAdmin = await _context.ServiceAccounts.FirstOrDefaultAsync();
-            if (superAdmin == null) throw new Exception("SuperAdmin master account not found.");
+            // Pegamos o ServiceAccount passado no request
+            var serviceAccount = await _context.ServiceAccounts.FindAsync(request.AccountId);
+            if (serviceAccount == null) throw new Exception("Conta de serviço (ServiceAccount) não encontrada.");
 
             // 2. Criar Tenant
             var tenant = new Tenant
             {
                 Id = Guid.NewGuid(),
-                AccountId = superAdmin.Id,
+                AccountId = serviceAccount.Id,
                 Name = request.Name,
                 Subdomain = request.Subdomain,
                 Email = request.Email,
