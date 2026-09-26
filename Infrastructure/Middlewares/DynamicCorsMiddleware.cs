@@ -28,9 +28,9 @@ namespace Kepas.Core.Api.Infrastructure.Middlewares
             {
                 if (!string.IsNullOrEmpty(origin))
                 {
-                    context.Response.Headers.Add("Access-Control-Allow-Origin", origin);
-                    context.Response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-                    context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Authorization, Accept-Language");
+                    context.Response.Headers.Append("Access-Control-Allow-Origin", origin);
+                    context.Response.Headers.Append("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+                    context.Response.Headers.Append("Access-Control-Allow-Headers", "Content-Type, Authorization, Accept-Language");
                     if (context.Request.Method == "OPTIONS")
                     {
                         context.Response.StatusCode = 200;
@@ -83,9 +83,9 @@ namespace Kepas.Core.Api.Infrastructure.Middlewares
             }
 
             // Aplica os cabeçalhos de permissão dinamicamente
-            context.Response.Headers.Add("Access-Control-Allow-Origin", origin);
-            context.Response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-            context.Response.Headers.Add("Access-Control-Allow-Headers", "Content-Type, Authorization, Accept-Language");
+            context.Response.Headers.Append("Access-Control-Allow-Origin", origin);
+            context.Response.Headers.Append("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+            context.Response.Headers.Append("Access-Control-Allow-Headers", "Content-Type, Authorization, Accept-Language");
 
             // Se for chamada de pre-flight (OPTIONS), apenas retorna 200 OK
             if (context.Request.Method == "OPTIONS")
@@ -98,3 +98,4 @@ namespace Kepas.Core.Api.Infrastructure.Middlewares
         }
     }
 }
+
