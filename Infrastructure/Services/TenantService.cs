@@ -6,6 +6,7 @@ using Kepas.Core.Api.Domain.Entities;
 using Kepas.Core.Api.Domain.Interfaces;
 using Kepas.Core.Api.Domain.DTOs.Requests;
 using Kepas.Core.Api.Domain.DTOs.Responses;
+using Kepas.Core.Api.Domain.DTOs.Responses.Pagination;
 using Kepas.Core.Api.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using BCrypt.Net;
@@ -21,10 +22,22 @@ namespace Kepas.Core.Api.Infrastructure.Services
             _context = context;
         }
 
-        public async Task<List<TenantDTO>> GetAllTenantsAsync()
+        public async Task<PagedResult<TenantDTO>> GetAllTenantsAsync(string search, int page, int limit)
         {
-            var tenants = await _context.Tenants
+            var query = _context.Tenants.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var s = search.ToLower();
+                query = query.Where(t => t.Name.ToLower().Contains(s) || t.Subdomain.ToLower().Contains(s) || t.Email.ToLower().Contains(s));
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var items = await query
                 .OrderByDescending(t => t.CreatedAt)
+                .Skip((page - 1) * limit)
+                .Take(limit)
                 .Select(t => new TenantDTO
                 {
                     Id = t.Id,
@@ -37,7 +50,13 @@ namespace Kepas.Core.Api.Infrastructure.Services
                 })
                 .ToListAsync();
 
-            return tenants;
+            return new PagedResult<TenantDTO>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                PageNumber = page,
+                PageSize = limit
+            };
         }
 
         public async Task<TenantDTO> CreateTenantAsync(CreateTenantRequest request)
