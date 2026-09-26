@@ -73,6 +73,20 @@ namespace Kepas.Core.Api.Controllers
                 return StatusCode(500, ApiResponse<TenantDTO>.Error("Erro interno ao resolver inquilino."));
             }
         }
+
+        [HttpPatch("{id}/toggle-status")]
+        public async Task<IActionResult> ToggleStatus(Guid id)
+        {
+            try
+            {
+                var success = await _tenantService.ToggleTenantStatusAsync(id);
+                return Ok(ApiResponse<object>.Ok(null, "Status alterado com sucesso."));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResponse<object>.Error(ex.Message));
+            }
+        }
     }
 }
 

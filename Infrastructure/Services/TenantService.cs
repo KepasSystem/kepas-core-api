@@ -31,9 +31,7 @@ namespace Kepas.Core.Api.Infrastructure.Services
                     Name = t.Name,
                     Subdomain = t.Subdomain,
                     Email = t.Email,
-                    // TODO: IsActive requires fetching if it's on Account or TenantUser. 
-                    // Temporarily using true since we didn't add IsActive to Tenant entity directly yet.
-                    IsActive = true, 
+                    IsActive = t.IsActive, 
                     CreatedAt = t.CreatedAt,
                     CurrentPlan = "Básico"
                 })
@@ -62,7 +60,8 @@ namespace Kepas.Core.Api.Infrastructure.Services
                 Email = request.Email,
                 LocalSecretKey = Guid.NewGuid().ToString(),
                 LogoUrl = "https://via.placeholder.com/150",
-                ThemeColorsJson = "{}"
+                ThemeColorsJson = "{}",
+                IsActive = true
             };
             _context.Tenants.Add(tenant);
 
@@ -91,15 +90,22 @@ namespace Kepas.Core.Api.Infrastructure.Services
                 Name = tenant.Name,
                 Subdomain = tenant.Subdomain,
                 Email = tenant.Email,
-                IsActive = true,
+                IsActive = tenant.IsActive,
                 CreatedAt = tenant.CreatedAt
             };
         }
 
         public async Task<bool> ToggleTenantStatusAsync(Guid tenantId)
         {
-            // Faremos essa implementação de toggle quando alterarmos o Entity para possuir IsActive
-            return await Task.FromResult(true);
+            var tenant = await _context.Tenants.FindAsync(tenantId);
+            if (tenant == null) throw new Exception("Inquilino não encontrado.");
+
+            tenant.IsActive = !tenant.IsActive;
+            
+            // Opcional: Se bloquear o tenant, poderiamos também desativar os utilizadores dele
+            
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<TenantDTO> GetTenantBySubdomainAsync(string subdomain)
@@ -115,7 +121,7 @@ namespace Kepas.Core.Api.Infrastructure.Services
                 Name = tenant.Name,
                 Subdomain = tenant.Subdomain,
                 Email = tenant.Email,
-                IsActive = true, // Temporário até adicionar IsActive na Entity Tenant
+                IsActive = tenant.IsActive,
                 CreatedAt = tenant.CreatedAt
             };
         }
