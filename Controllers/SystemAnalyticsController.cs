@@ -10,7 +10,7 @@ namespace Kepas.Core.Api.Controllers
 {
     [ApiController]
     [Route("api/v1/system-analytics")]
-    [Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = "Super Administrador")]
     public class SystemAnalyticsController : ControllerBase
     {
         [HttpGet("kpis")]
@@ -46,3 +46,4 @@ namespace Kepas.Core.Api.Controllers
         }
     }
 }
+

@@ -11,7 +11,7 @@ namespace Kepas.Core.Api.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    [Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = "Super Administrador")]
     public class TenantsController : ControllerBase
     {
         private readonly ITenantService _tenantService;
@@ -75,3 +75,4 @@ namespace Kepas.Core.Api.Controllers
         }
     }
 }
+

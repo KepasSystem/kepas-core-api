@@ -10,7 +10,7 @@ namespace Kepas.Core.Api.Controllers
 {
     [ApiController]
     [Route("api/v1/system-settings")]
-    [Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = "Super Administrador")]
     public class SystemSettingsController : ControllerBase
     {
         private readonly ISystemSettingsService _settingsService;
@@ -63,3 +63,4 @@ namespace Kepas.Core.Api.Controllers
         }
     }
 }
+

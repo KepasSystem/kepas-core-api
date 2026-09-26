@@ -8,7 +8,7 @@ namespace Kepas.Core.Api.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    [Authorize(Roles = "SuperAdmin")]
+    [Authorize(Roles = "Super Administrador")]
     public class SubscriptionsController : ControllerBase
     {
         [HttpGet("modules")]
@@ -35,3 +35,4 @@ namespace Kepas.Core.Api.Controllers
         }
     }
 }
+
