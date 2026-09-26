@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
@@ -23,8 +23,8 @@ namespace Kepas.Core.Api.Infrastructure.Middlewares
             var origin = context.Request.Headers["Origin"].ToString();
             var adminPortalDomain = config["AdminSettings:AdminPortalDomain"];
 
-            // Se for requisição da mesma origem (ou mobile/insomnia sem origin), ignora bloqueio estrito
-            if (string.IsNullOrEmpty(origin) || origin.Contains("localhost") || (!string.IsNullOrEmpty(adminPortalDomain) && origin.Contains(adminPortalDomain))) 
+            // Se for requisiÃ§Ã£o da mesma origem (ou mobile/insomnia sem origin), ignora bloqueio estrito
+            if (string.IsNullOrEmpty(origin) || origin.Contains("localhost") || origin.Contains("127.0.0.1") || (!string.IsNullOrEmpty(adminPortalDomain) && origin.Contains(adminPortalDomain))) 
             {
                 if (!string.IsNullOrEmpty(origin))
                 {
@@ -41,12 +41,12 @@ namespace Kepas.Core.Api.Infrastructure.Middlewares
                 return;
             }
 
-            // Precisamos criar um Scope porque DbContext não pode ser injetado direto num Middleware Singleton
+            // Precisamos criar um Scope porque DbContext nÃ£o pode ser injetado direto num Middleware Singleton
             using var scope = context.RequestServices.CreateScope();
             var cache = scope.ServiceProvider.GetRequiredService<IDistributedCache>();
             var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-            // Busca domínios permitidos no Redis
+            // Busca domÃ­nios permitidos no Redis
             var cacheKey = "AllowedDomains";
             var cachedDomains = await cache.GetStringAsync(cacheKey);
             List<string> allowedDomains;
@@ -64,7 +64,7 @@ namespace Kepas.Core.Api.Infrastructure.Middlewares
                 allowedDomains = JsonSerializer.Deserialize<List<string>>(cachedDomains);
             }
 
-            // Se a origem bater com algum subdomínio ou domínio completo registrado:
+            // Se a origem bater com algum subdomÃ­nio ou domÃ­nio completo registrado:
             bool isAllowed = false;
             foreach (var domain in allowedDomains)
             {
@@ -82,7 +82,7 @@ namespace Kepas.Core.Api.Infrastructure.Middlewares
                 return;
             }
 
-            // Aplica os cabeçalhos de permissão dinamicamente
+            // Aplica os cabeÃ§alhos de permissÃ£o dinamicamente
             context.Response.Headers.Append("Access-Control-Allow-Origin", origin);
             context.Response.Headers.Append("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
             context.Response.Headers.Append("Access-Control-Allow-Headers", "Content-Type, Authorization, Accept-Language");
@@ -98,4 +98,5 @@ namespace Kepas.Core.Api.Infrastructure.Middlewares
         }
     }
 }
+
 

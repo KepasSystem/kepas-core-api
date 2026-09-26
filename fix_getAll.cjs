@@ -1,0 +1,4 @@
+﻿const fs = require('fs');
+let content = fs.readFileSync('Controllers/ServiceAccountsController.cs', 'utf8');
+content = content.replace(/public async Task<IActionResult> GetAll\(\)[\s\S]*?\{[\s\S]*?var accounts = await _serviceAccountService\.GetAllAsync\(\);[\s\S]*?return Ok\(ApiResponse<object>\.Ok\(accounts, .*?\)\);[\s\S]*?\}/, 'public async Task<IActionResult> GetAll([FromQuery] string search = "", [FromQuery] int page = 1, [FromQuery] int limit = 10)\n        {\n            var accounts = await _serviceAccountService.GetAllAsync(search, page, limit);\n            return Ok(ApiResponse<Kepas.Core.Api.Domain.DTOs.Responses.Pagination.PagedResult<Kepas.Core.Api.Domain.DTOs.Responses.ServiceAccounts.ServiceAccountDTO>>.Ok(accounts, _translator.GetString(Kepas.Core.Api.Domain.Constants.TranslationKeys.ServiceAccountsLoadedSuccess)));\n        }');
+fs.writeFileSync('Controllers/ServiceAccountsController.cs', content);

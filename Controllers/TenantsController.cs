@@ -15,10 +15,12 @@ namespace Kepas.Core.Api.Controllers
     public class TenantsController : ControllerBase
     {
         private readonly ITenantService _tenantService;
+        private readonly ITranslationService _translator;
 
-        public TenantsController(ITenantService tenantService)
+        public TenantsController(ITenantService tenantService, ITranslationService translator)
         {
             _tenantService = tenantService;
+            _translator = translator;
         }
 
         [HttpGet]
@@ -89,6 +91,7 @@ namespace Kepas.Core.Api.Controllers
         }
     }
 }
+
 
 
 

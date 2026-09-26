@@ -13,17 +13,19 @@ namespace Kepas.Core.Api.Controllers
     public class ServiceAccountsController : ControllerBase
     {
         private readonly IServiceAccountService _serviceAccountService;
+        private readonly ITranslationService _translator;
 
-        public ServiceAccountsController(IServiceAccountService serviceAccountService)
+        public ServiceAccountsController(IServiceAccountService serviceAccountService, ITranslationService translator)
         {
             _serviceAccountService = serviceAccountService;
+            _translator = translator;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] string search = "", [FromQuery] int page = 1, [FromQuery] int limit = 10)
         {
-            var accounts = await _serviceAccountService.GetAllAsync();
-            return Ok(ApiResponse<object>.Ok(accounts, "Contas de serviÃ§o carregadas com sucesso."));
+            var accounts = await _serviceAccountService.GetAllAsync(search, page, limit);
+            return Ok(ApiResponse<Kepas.Core.Api.Domain.DTOs.Responses.Pagination.PagedResult<Kepas.Core.Api.Domain.DTOs.Responses.ServiceAccounts.ServiceAccountDTO>>.Ok(accounts, _translator.GetString(Kepas.Core.Api.Domain.Constants.TranslationKeys.ServiceAccountsLoadedSuccess)));
         }
 
         [HttpPost]
@@ -41,5 +43,6 @@ namespace Kepas.Core.Api.Controllers
         }
     }
 }
+
 
 
