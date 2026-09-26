@@ -31,7 +31,7 @@ namespace Kepas.Core.Api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ApiResponse<List<TenantDTO>>.Error(ex.Message));
+                return BadRequest(ApiResponse<List<TenantDTO>>.Error("Ocorreu um erro interno ao processar a operação."));
             }
         }
 
@@ -45,7 +45,7 @@ namespace Kepas.Core.Api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ApiResponse<TenantDTO>.Error(ex.Message));
+                return BadRequest(ApiResponse<TenantDTO>.Error("Ocorreu um erro interno ao processar a operação."));
             }
         }
 
@@ -84,7 +84,7 @@ namespace Kepas.Core.Api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ApiResponse<object>.Error(ex.Message));
+                return BadRequest(ApiResponse<object>.Error("Ocorreu um erro interno ao processar a operação."));
             }
         }
     }
