@@ -1,8 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Kepas.Core.Api.Domain.Interfaces;
 using Kepas.Core.Api.Domain.DTOs.Responses;
+using Kepas.Core.Api.Domain.DTOs.Responses.SystemAnalytics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,37 +13,25 @@ namespace Kepas.Core.Api.Controllers
     [Authorize(Roles = "Super Administrador")]
     public class SystemAnalyticsController : ControllerBase
     {
-        [HttpGet("kpis")]
-        public IActionResult GetKpis()
+        private readonly ISystemAnalyticsService _analyticsService;
+
+        public SystemAnalyticsController(ISystemAnalyticsService analyticsService)
         {
-            // Retornando mock rápido para fechar o portal. O ideal é o serviço somar a tabela Tenants
-            var kpi = new 
-            {
-                TotalTenants = 1,
-                Mrr = 1500.00,
-                ChurnRate = 0.0,
-                NewSubscriptionsToday = 1
-            };
-            return Ok(ApiResponse<object>.Ok(kpi, "KPIs carregados"));
+            _analyticsService = analyticsService;
+        }
+
+        [HttpGet("kpis")]
+        public async Task<IActionResult> GetKpis()
+        {
+            var kpis = await _analyticsService.GetGlobalKpisAsync();
+            return Ok(ApiResponse<KpiDTO>.Ok(kpis, "KPIs carregados"));
         }
 
         [HttpGet("growth-chart")]
-        public IActionResult GetGrowthChart()
+        public async Task<IActionResult> GetGrowthChart()
         {
-            var chart = new List<object>
-            {
-                new { Month = "Jan", Clients = 0 },
-                new { Month = "Fev", Clients = 0 },
-                new { Month = "Mar", Clients = 0 },
-                new { Month = "Abr", Clients = 0 },
-                new { Month = "Mai", Clients = 0 },
-                new { Month = "Jun", Clients = 0 },
-                new { Month = "Jul", Clients = 0 },
-                new { Month = "Ago", Clients = 0 },
-                new { Month = "Set", Clients = 1 }
-            };
-            return Ok(ApiResponse<List<object>>.Ok(chart, "Gráfico carregado"));
+            var chart = await _analyticsService.GetGrowthChartAsync();
+            return Ok(ApiResponse<List<GrowthChartItemDTO>>.Ok(chart, "Gráfico carregado"));
         }
     }
 }
-
