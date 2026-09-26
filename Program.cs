@@ -32,13 +32,9 @@ builder.Services.AddStackExchangeRedisCache(options =>
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<ITenantService, TenantService>();
-builder.Services.AddScoped<ISystemSettingsService, SystemSettingsService>();
-builder.Services.AddScoped<IPlatformRoleService, PlatformRoleService>();
-builder.Services.AddScoped<IPlatformAdminService, PlatformAdminService>();
-builder.Services.AddScoped<IServiceAccountService, ServiceAccountService>();
-builder.Services.AddScoped<ISystemAnalyticsService, SystemAnalyticsService>();
+using Kepas.Core.Api.Infrastructure.IoC;
+
+builder.Services.AddInfrastructureDependencies();
 
 // JWT Auth Config
 var jwtKey = builder.Configuration["JwtSettings:Secret"] ?? "KEPAS_VERY_LONG_SECRET_KEY_FOR_JWT_SIGNATURE_12345!";
