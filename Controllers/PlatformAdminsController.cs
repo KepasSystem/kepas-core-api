@@ -33,9 +33,9 @@ namespace Kepas.Core.Api.Controllers
         }
 
         [HttpPatch("{id}/toggle-status")]
-        public async Task<IActionResult> ToggleStatus(Guid id, [FromBody] bool isActive)
+        public async Task<IActionResult> ToggleStatus(Guid id)
         {
-            var result = await _adminService.ToggleAdminStatusAsync(id, isActive);
+            var result = await _adminService.ToggleAdminStatusAsync(id);
             if (!result) return NotFound(ApiResponse<object>.Error("Administrador não encontrado."));
             return Ok(ApiResponse<object>.Ok(null, "Status alterado com sucesso."));
         }

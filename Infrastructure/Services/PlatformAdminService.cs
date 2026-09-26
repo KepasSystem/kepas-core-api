@@ -69,12 +69,12 @@ namespace Kepas.Core.Api.Infrastructure.Services
             };
         }
 
-        public async Task<bool> ToggleAdminStatusAsync(Guid id, bool isActive)
+        public async Task<bool> ToggleAdminStatusAsync(Guid id)
         {
             var admin = await _context.PlatformAdmins.FindAsync(id);
             if (admin == null) return false;
 
-            admin.IsActive = isActive;
+            admin.IsActive = !admin.IsActive;
             await _context.SaveChangesAsync();
             return true;
         }
