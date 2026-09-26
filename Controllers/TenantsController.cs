@@ -27,11 +27,11 @@ namespace Kepas.Core.Api.Controllers
             try
             {
                 var tenants = await _tenantService.GetAllTenantsAsync(search, page, limit);
-                return Ok(ApiResponse<Kepas.Core.Api.Domain.DTOs.Responses.Pagination.PagedResult<TenantDTO>>.Ok(tenants, "Inquilinos carregados com sucesso."));
+                return Ok(ApiResponse<Kepas.Core.Api.Domain.DTOs.Responses.Pagination.PagedResult<TenantDTO>>.Ok(tenants, _translator.GetString(Kepas.Core.Api.Domain.Constants.TranslationKeys.TenantsLoadedSuccess)));
             }
             catch (Exception ex)
             {
-                return BadRequest(ApiResponse<Kepas.Core.Api.Domain.DTOs.Responses.Pagination.PagedResult<TenantDTO>>.Error("Ocorreu um erro interno ao processar a operação."));
+                return BadRequest(ApiResponse<Kepas.Core.Api.Domain.DTOs.Responses.Pagination.PagedResult<TenantDTO>>.Error(_translator.GetString(Kepas.Core.Api.Domain.Constants.TranslationKeys.GenericError)));
             }
         }
 
@@ -89,5 +89,6 @@ namespace Kepas.Core.Api.Controllers
         }
     }
 }
+
 
 
