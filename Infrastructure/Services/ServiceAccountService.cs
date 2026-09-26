@@ -22,21 +22,18 @@ namespace Kepas.Core.Api.Infrastructure.Services
 
         public async Task<List<ServiceAccountDTO>> GetAllAsync()
         {
-            var accounts = await _context.ServiceAccounts
-                .Include(a => a.Tenants)
-                .Include(a => a.Subscriptions)
+            return await _context.ServiceAccounts
                 .OrderByDescending(a => a.CreatedAt)
+                .Select(a => new ServiceAccountDTO
+                {
+                    Id = a.Id,
+                    OwnerName = a.OwnerName,
+                    Email = a.Email,
+                    CreatedAt = a.CreatedAt,
+                    TotalTenants = a.Tenants.Count,
+                    TotalSubscriptions = a.Subscriptions.Count
+                })
                 .ToListAsync();
-
-            return accounts.Select(a => new ServiceAccountDTO
-            {
-                Id = a.Id,
-                OwnerName = a.OwnerName,
-                Email = a.Email,
-                CreatedAt = a.CreatedAt,
-                TotalTenants = a.Tenants.Count,
-                TotalSubscriptions = a.Subscriptions.Count
-            }).ToList();
         }
 
         public async Task<ServiceAccountDTO> CreateAsync(CreateServiceAccountRequest request)
