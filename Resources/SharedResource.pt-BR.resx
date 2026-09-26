@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="SUCCESS" xml:space="preserve">
+    <value>Operação realizada com sucesso.</value>
+  </data>
+  <data name="COMPANY_NOT_FOUND" xml:space="preserve">
+    <value>Empresa não encontrada.</value>
+  </data>
+  <data name="COMPANY_SUSPENDED" xml:space="preserve">
+    <value>Conta suspensa. Contate o suporte.</value>
+  </data>
+  <data name="LOGIN_SUCCESSFUL" xml:space="preserve">
+    <value>Login realizado com sucesso.</value>
+  </data>
+  <data name="INVALID_CREDENTIALS" xml:space="preserve">
+    <value>Credenciais inválidas.</value>
+  </data>
+  <data name="USER_INACTIVE" xml:space="preserve">
+    <value>Usuário inativo ou suspenso.</value>
+  </data>
+  <data name="UNAUTHORIZED" xml:space="preserve">
+    <value>Acesso não autorizado.</value>
+  </data>
+  <data name="FORBIDDEN" xml:space="preserve">
+    <value>Você não tem permissão para esta ação.</value>
+  </data>
+  <data name="INTERNAL_SERVER_ERROR" xml:space="preserve">
+    <value>Erro interno no servidor.</value>
+  </data>
+</root>
