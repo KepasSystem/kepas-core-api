@@ -10,6 +10,6 @@ namespace Kepas.Core.Api.Domain.Interfaces
     {
         Task<List<PlatformAdminDTO>> GetAllAdminsAsync();
         Task<PlatformAdminDTO> CreateAdminAsync(CreatePlatformAdminRequest request);
-        Task<bool> ToggleAdminStatusAsync(Guid id, bool isActive);
+        Task<bool> ToggleAdminStatusAsync(Guid id);
     }
 }
