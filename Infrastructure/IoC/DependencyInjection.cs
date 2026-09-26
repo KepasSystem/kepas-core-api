@@ -17,6 +17,7 @@ namespace Kepas.Core.Api.Infrastructure.IoC
             services.AddScoped<IPlatformAdminService, PlatformAdminService>();
             services.AddScoped<IServiceAccountService, ServiceAccountService>();
             services.AddScoped<ISystemAnalyticsService, SystemAnalyticsService>();
+            services.AddScoped<ITranslationService, AppTranslationService>();
 
             return services;
         }
