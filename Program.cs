@@ -1,3 +1,4 @@
+﻿using Kepas.Core.Api.Infrastructure.IoC;
 using Kepas.Core.Api.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,7 +33,7 @@ builder.Services.AddStackExchangeRedisCache(options =>
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
-using Kepas.Core.Api.Infrastructure.IoC;
+
 
 builder.Services.AddInfrastructureDependencies();
 
@@ -98,3 +99,4 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.Run();
+
