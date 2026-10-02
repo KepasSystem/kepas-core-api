@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Kepas.Core.Api.Domain.DTOs.Responses.ServiceAccounts
@@ -11,5 +11,8 @@ namespace Kepas.Core.Api.Domain.DTOs.Responses.ServiceAccounts
         public DateTime CreatedAt { get; set; }
         public int TotalTenants { get; set; }
         public int TotalSubscriptions { get; set; }
+        public Domain.Enums.PipelineStatus PipelineStatus { get; set; }
+        public decimal EstimatedValue { get; set; }
     }
 }
+

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -44,7 +44,9 @@ namespace Kepas.Core.Api.Infrastructure.Services
                     Email = a.Email,
                     CreatedAt = a.CreatedAt,
                     TotalTenants = a.Tenants.Count,
-                    TotalSubscriptions = a.Subscriptions.Count
+                    TotalSubscriptions = a.Subscriptions.Count,
+                    PipelineStatus = a.PipelineStatus,
+                    EstimatedValue = a.EstimatedValue
                 })
                 .ToListAsync();
 
@@ -61,7 +63,7 @@ namespace Kepas.Core.Api.Infrastructure.Services
         {
             if (await _context.ServiceAccounts.AnyAsync(a => a.Email == request.Email))
             {
-                throw new Exception("E-mail já está em uso por outra conta de serviço.");
+                throw new Exception("E-mail jÃ¡ estÃ¡ em uso por outra conta de serviÃ§o.");
             }
 
             var account = new ServiceAccount
@@ -81,8 +83,21 @@ namespace Kepas.Core.Api.Infrastructure.Services
                 Email = account.Email,
                 CreatedAt = account.CreatedAt,
                 TotalTenants = 0,
-                TotalSubscriptions = 0
+                TotalSubscriptions = 0,
+                PipelineStatus = account.PipelineStatus,
+                EstimatedValue = account.EstimatedValue
             };
         }
-    }
+
+        public async Task<bool> UpdatePipelineAsync(Guid id, Domain.Enums.PipelineStatus status, decimal estimatedValue)
+        {
+            var account = await _context.ServiceAccounts.FindAsync(id);
+            if (account == null) throw new Exception("Conta de serviço não encontrada.");
+
+            account.PipelineStatus = status;
+            account.EstimatedValue = estimatedValue;
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        }
 }

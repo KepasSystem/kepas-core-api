@@ -1,4 +1,4 @@
-using Kepas.Core.Api.Domain.Entities;
+﻿using Kepas.Core.Api.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Kepas.Core.Api.Infrastructure.Data
@@ -9,6 +9,9 @@ namespace Kepas.Core.Api.Infrastructure.Data
 
         public DbSet<SystemConfig> SystemConfigs { get; set; }
         public DbSet<ServiceAccount> ServiceAccounts { get; set; }
+        public DbSet<ServiceAccountNote> ServiceAccountNotes { get; set; }
+        public DbSet<ServiceAccountDocument> ServiceAccountDocuments { get; set; }
+        public DbSet<SupportTicket> SupportTickets { get; set; }
         public DbSet<PlatformAdmin> PlatformAdmins { get; set; }
         public DbSet<PlatformRole> PlatformRoles { get; set; }
         public DbSet<PlatformPermission> PlatformPermissions { get; set; }
@@ -56,3 +59,4 @@ namespace Kepas.Core.Api.Infrastructure.Data
         }
     }
 }
+
