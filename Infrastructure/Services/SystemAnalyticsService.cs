@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,7 +21,7 @@ namespace Kepas.Core.Api.Infrastructure.Services
         public async Task<KpiDTO> GetGlobalKpisAsync()
         {
             var today = DateTime.UtcNow.Date;
-            var startOfMonth = new DateTime(today.Year, today.Month, 1);
+            var startOfMonth = new DateTime(today.Year, today.Month, 1, 0, 0, 0, DateTimeKind.Utc);
 
             var totalAccounts = await _context.ServiceAccounts.CountAsync();
             var totalTenants = await _context.Tenants.CountAsync();
@@ -55,7 +55,7 @@ namespace Kepas.Core.Api.Infrastructure.Services
             for (int i = 5; i >= 0; i--)
             {
                 var targetMonth = now.AddMonths(-i);
-                var startDate = new DateTime(targetMonth.Year, targetMonth.Month, 1);
+                var startDate = new DateTime(targetMonth.Year, targetMonth.Month, 1, 0, 0, 0, DateTimeKind.Utc);
                 var endDate = startDate.AddMonths(1).AddTicks(-1);
 
                 var accountsInMonth = await _context.ServiceAccounts
@@ -76,3 +76,5 @@ namespace Kepas.Core.Api.Infrastructure.Services
         }
     }
 }
+
+

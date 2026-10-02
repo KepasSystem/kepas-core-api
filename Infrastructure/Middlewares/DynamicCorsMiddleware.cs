@@ -20,11 +20,23 @@ namespace Kepas.Core.Api.Infrastructure.Middlewares
 
         public async Task InvokeAsync(HttpContext context, Microsoft.Extensions.Configuration.IConfiguration config)
         {
-            var origin = context.Request.Headers["Origin"].ToString();
+                        var origin = context.Request.Headers["Origin"].ToString();
             var adminPortalDomain = config["AdminSettings:AdminPortalDomain"];
+            var path = context.Request.Path.Value?.ToLower() ?? "";
 
-            // Se for requisiÃ§Ã£o da mesma origem (ou mobile/insomnia sem origin), ignora bloqueio estrito
-            if (string.IsNullOrEmpty(origin) || origin.Contains("localhost") || origin.Contains("127.0.0.1") || (!string.IsNullOrEmpty(adminPortalDomain) && origin.Contains(adminPortalDomain))) 
+            bool isAdminRoute = path.StartsWith("/api/v1/platform") ||
+                                path.StartsWith("/api/v1/serviceaccounts") ||
+                                path.StartsWith("/api/v1/tenants") ||
+                                path.StartsWith("/api/v1/system-analytics") ||
+                                path.StartsWith("/api/v1/systemsettings") ||
+                                path.StartsWith("/api/v1/subscriptions") ||
+                                path.StartsWith("/api/v1/auth/superadmin");
+
+            bool isDev = origin.Contains("localhost") || origin.Contains("127.0.0.1");
+            bool isAdminOrigin = !string.IsNullOrEmpty(adminPortalDomain) && origin.Contains(adminPortalDomain);
+
+            // Se for requisição da mesma origem (ou mobile/insomnia sem origin), ignora bloqueio estrito
+            if (string.IsNullOrEmpty(origin) || isDev || isAdminOrigin) 
             {
                 if (!string.IsNullOrEmpty(origin))
                 {
@@ -38,6 +50,13 @@ namespace Kepas.Core.Api.Infrastructure.Middlewares
                     }
                 }
                 await _next(context);
+                return;
+            }
+
+            if (isAdminRoute)
+            {
+                context.Response.StatusCode = 403;
+                await context.Response.WriteAsync("CORS Policy: Rotas de administracao sao restritas ao portal admin.");
                 return;
             }
 
@@ -98,5 +117,6 @@ namespace Kepas.Core.Api.Infrastructure.Middlewares
         }
     }
 }
+
 
 
